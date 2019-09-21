@@ -4,37 +4,44 @@ export default class Grid
 {
 	constructor()
 	{
-		this.width = 0;
-		this.height = 0;
 		this.cycle = 0;
-		this.rows = [];
+		this.cells = [];
 		this.cyclePositions = [];
 	}
 
 	/**
 	 * @param {number} xPosition
 	 * @param {number} yPosition
+	 * @return {string}
+	 */
+	getCellKey(xPosition, yPosition)
+	{
+		return `${xPosition},${yPosition}`;
+	}
+
+	/**
+	 * @param {number} xPosition
+	 * @param {number} yPosition
+	 * @param {Cell} cell
 	 * @param {Grid}
 	 */
-	addCell(xPosition, yPosition, cell)
+	setCell(xPosition, yPosition, cell)
 	{
-		if (xPosition >= this.width) {
-			this.width = xPosition - 1;
+		let cellKey = this.getCellKey(xPosition, yPosition);
+		this.cells[cellKey] = cell;
+
+		if (!cell.isAlive()) {
+			return this;
 		}
 
-		if (yPosition > this.height) {
-			this.height = yPosition - 1;
+		for (let xIndex = xPosition - 1; xIndex <= (xPosition + 1); xIndex++) {
+			for (let yIndex = yPosition - 1; yIndex <= (yPosition + 1); yIndex++) {
+				cellKey = this.getCellKey(xIndex, yIndex);
+				if (typeof this.cells[cellKey] === 'undefined') {
+					this.cells[cellKey] = new Cell(false);
+				}
+			}
 		}
-
-		if (typeof this.rows[xPosition] === 'undefined') {
-			this.rows[xPosition] = [];
-		}
-
-		if (typeof this.rows[xPosition][yPosition] !== 'undefined') {
-			throw new Error(`Unable to add cell '${xPosition}', '${yPosition}'. Cell already exists.`);
-		}
-
-		this.rows[xPosition][yPosition] = cell;
 
 		return this;
 	}
@@ -46,34 +53,32 @@ export default class Grid
 	 */
 	getCell(xPosition, yPosition)
 	{
-		if (typeof this.rows[xPosition] === 'undefined') {
-			this.rows[xPosition] = [];
+		let cellKey = this.getCellKey(xPosition, yPosition);
+		if (typeof this.cells[cellKey] === 'undefined') {
+			return new Cell(false);
 		}
 
-		if (typeof this.rows[xPosition][yPosition] === 'undefined') {
-			this.rows[xPosition][yPosition] = new Cell(false);
-		}
-
-		return this.rows[xPosition][yPosition];
+		return this.cells[cellKey];
 	}
 
 	nextCycle()
 	{
-		let nextCycleRows = [];
-		let xIndex = 0;
-		let yIndex = 0;
-		while (xIndex < this.width) {
-			nextCycleRows[xIndex] = [];
-			while (yIndex < this.height) {
-				nextCycleRows[xIndex][yIndex] = this.getNextCycleCell(xIndex, yIndex);
-				yIndex++;
+		let nextCycleCellsArguments = [];
+
+		for (var key in this.cells) {
+			let [xPosition, yPosition] = key.split(',').map((value) => parseInt(value));
+			let nextCycleCell = this.getNextCycleCell(xPosition, yPosition);
+			if (nextCycleCell.isAlive()) {
+				nextCycleCellsArguments.push([xPosition, yPosition, nextCycleCell]);
 			}
-			xIndex++;
-		}
+		};
 
 		this.cycle++;
-		console.log(nextCycleRows);
-		this.rows = nextCycleRows;
+
+		this.cells = [];
+		nextCycleCellsArguments.forEach(function(setCellArguments) {
+			this.setCell(...setCellArguments);
+		}.bind(this));
 	}
 
 	/**
@@ -113,16 +118,16 @@ export default class Grid
 
 		if (currentCell.isAlive()) {
 			if (aliveNeighbourCount < 2 || aliveNeighbourCount > 3) {
-				currentCell.kill();
+				return new Cell(false);
 			}
 
-			return currentCell;
+			return new Cell(true);
 		}
 
 		if (aliveNeighbourCount === 3) {
-			currentCell.ressurect();
+			return new Cell(true);
 		}
 
-		return currentCell;
+		return new Cell(false);
 	}
 }

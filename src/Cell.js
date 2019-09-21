@@ -14,14 +14,4 @@ export default class Cell
 	{
 		return this.alive;
 	}
-
-	kill()
-	{
-		this.alive = false;
-	}
-
-	ressurect()
-	{
-		this.alive = true;
-	}
 }
