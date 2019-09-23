@@ -37,7 +37,7 @@ export function initializeRenderingGrid(board) {
   return renderingGrid;
 }
 
-export function updateRenderingGrid(board, renderingGrid) {
+export function updateRenderingGrid(renderingGrid, board) {
   const newRenderingGrid = [];
 
   for (let i = 0; i < board.length; i += 1) {
