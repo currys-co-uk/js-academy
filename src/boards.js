@@ -34,11 +34,11 @@ let randomBiggerThanBigBoard = [];
 function generateRandomBoard() {
   const boardSize = Math.round(Math.random() * 20) + 45;
 
-  for (let i = 0; i < boardSize; i++) {
+  for (let i = 0; i < boardSize; i += 1) {
     const row = [];
     randomBiggerThanBigBoard[i] = row;
 
-    for (let j = 0; j < boardSize; j++) {
+    for (let j = 0; j < boardSize; j += 1) {
       row.push(Math.round(Math.random()));
     }
   }
@@ -46,6 +46,7 @@ function generateRandomBoard() {
 
 randomBiggerThanBigBoard = generateRandomBoard();
 
+// eslint-disable-next-line import/prefer-default-export
 export const boards = {
   smallBoard,
   mediumBoard,

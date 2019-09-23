@@ -26,10 +26,10 @@ const ranks = [
 export function initializeRenderingGrid(board) {
   const renderingGrid = [];
 
-  for (let i = 0; i < board.length; i++) {
+  for (let i = 0; i < board.length; i += 1) {
     renderingGrid[i] = [];
 
-    for (let j = 0; j < board[i].length; j++) {
+    for (let j = 0; j < board[i].length; j += 1) {
       renderingGrid[i][j] = 0;
     }
   }
@@ -40,10 +40,10 @@ export function initializeRenderingGrid(board) {
 export function updateRenderingGrid(board, renderingGrid) {
   const newRenderingGrid = [];
 
-  for (let i = 0; i < board.length; i++) {
+  for (let i = 0; i < board.length; i += 1) {
     newRenderingGrid[i] = [];
 
-    for (let j = 0; j < board[i].length; j++) {
+    for (let j = 0; j < board[i].length; j += 1) {
       if (board[i][j] === 0) {
         newRenderingGrid[i][j] = 0;
       } else {
@@ -58,10 +58,10 @@ export function updateRenderingGrid(board, renderingGrid) {
 export function renderColorfulBoard(renderingGrid, renderZerosInBlack) {
   let renderedBoard = '';
 
-  for (let i = 0; i < renderingGrid.length; i++) {
-    let line = [];
+  for (let i = 0; i < renderingGrid.length; i += 1) {
+    const line = [];
 
-    for (let j = 0; j < renderingGrid[i].length; j++) {
+    for (let j = 0; j < renderingGrid[i].length; j += 1) {
       const renderingGridElement = renderingGrid[i][j];
       let color = renderingGridElement < colors.length
         ? colors[renderingGridElement]
@@ -80,7 +80,7 @@ export function renderColorfulBoard(renderingGrid, renderZerosInBlack) {
       line.push(items);
     }
 
-    renderedBoard += line.join(' ') + '\n';
+    renderedBoard += `${line.join(' ')}\n`;
   }
 
   return renderedBoard + white;
@@ -89,8 +89,8 @@ export function renderColorfulBoard(renderingGrid, renderZerosInBlack) {
 export function renderColorCheatSheet() {
   let cheatSheet = '';
 
-  for (let i = 0; i < colors.length; i++) {
-    cheatSheet += colors[i] + 'level - ' + ranks[i] + '\n';
+  for (let i = 0; i < colors.length; i += 1) {
+    cheatSheet += `${colors[i]}level - ${ranks[i]}\n`;
   }
 
   cheatSheet += white;

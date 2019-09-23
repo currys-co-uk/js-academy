@@ -9,6 +9,7 @@ import { boards } from './boards';
 
 const readline = require('readline');
 
+const renderZerosInBlack = process.argv.slice(2)[0] === '-b';
 let gameLoopInterval;
 let renderingSpeed;
 const boardNames = Object.keys(boards);
@@ -41,7 +42,8 @@ function displayBoard(board) {
 
     boardRenderingGrid = updateRenderingGrid(board, boardRenderingGrid);
 
-    console.log(renderColorfulBoard(boardRenderingGrid));
+    // eslint-disable-next-line no-console
+    console.log(renderColorfulBoard(boardRenderingGrid, renderZerosInBlack));
 
     displayColorCheatSheet();
   }
@@ -64,7 +66,7 @@ function display(board) {
 function generateBoardsQuestion() {
   let counter = 0;
   let question = 'Choose a board: ';
-  boardNames.forEach((boardName) => question += '\n' + (counter++) + ': ' + boardName);
+  boardNames.forEach((boardName) => { question += `\n${counter += 1}: ${boardName}`; });
 
   return question;
 }
@@ -106,6 +108,8 @@ process.stdin.on('keypress', (str, key) => {
       case 't':
         process.exit();
         break;
+      default:
+        break;
     }
 
     eventProcessed = true;
@@ -120,7 +124,7 @@ process.stdin.on('keypress', (str, key) => {
       controlsLine = 'Select board rendering speed is seconds:';
       currentSystemState = 'auto-start';
     } else {
-      controlsLine = 'Board \'' + key.name + '\' is not defined.\n' + generateBoardsQuestion();
+      controlsLine = `Board '${key.name}' is not defined.\n${generateBoardsQuestion()}`;
     }
 
     eventProcessed = true;
@@ -136,7 +140,7 @@ process.stdin.on('keypress', (str, key) => {
       controlsLine = '[Game running] Press (p) to pause, (t) to terminate';
       currentSystemState = 'auto-running';
     } else {
-      controlsLine = 'Render speed \'' + key.name + '\' is not supported.';
+      controlsLine = `Render speed '${key.name}' is not supported.`;
     }
 
     eventProcessed = true;
@@ -153,6 +157,8 @@ process.stdin.on('keypress', (str, key) => {
       case 't':
         process.exit();
         break;
+      default:
+        break;
     }
 
     eventProcessed = true;
@@ -168,6 +174,8 @@ process.stdin.on('keypress', (str, key) => {
         break;
       case 't':
         process.exit();
+        break;
+      default:
         break;
     }
 
