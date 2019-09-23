@@ -55,7 +55,7 @@ export function updateRenderingGrid(board, renderingGrid) {
   return newRenderingGrid;
 }
 
-export function renderColorfulBoard(renderingGrid, renderZerosInBlack) {
+export function renderColorfulBoard(renderingGrid, renderZerosInBlack = false) {
   let renderedBoard = '';
 
   for (let i = 0; i < renderingGrid.length; i += 1) {
