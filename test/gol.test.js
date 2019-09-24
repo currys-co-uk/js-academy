@@ -1,12 +1,12 @@
-import next, { countLiveNeighbours } from './gol';
+import getNextBoardState, { countLiveNeighbours } from '../src/gol';
 
 test('function next exist', () => {
-  expect(typeof next).toBe('function');
+  expect(typeof getNextBoardState).toBe('function');
 });
 
 test('next return array of array', () => {
   const input = [[]];
-  const output = next(input);
+  const output = getNextBoardState(input);
   expect(Array.isArray(output)).toBe(true);
   expect(Array.isArray(output[0])).toBe(true);
 });
@@ -14,7 +14,7 @@ test('next return array of array', () => {
 test('one live cell will die', () => {
   const input = [[1]];
   const expectedOutput = [[0]];
-  const output = next(input);
+  const output = getNextBoardState(input);
   expect(output).toEqual(expectedOutput);
 });
 
@@ -25,11 +25,13 @@ test('it will work', () => {
     [1, 0, 1],
   ];
   const expectedOutput = [
-    [0, 1, 1],
+    [1, 1, 1],
     [1, 0, 1],
     [0, 0, 0],
   ];
-  const output = next(input);
+
+  const output = getNextBoardState(input);
+
   expect(output).toEqual(expectedOutput);
 });
 

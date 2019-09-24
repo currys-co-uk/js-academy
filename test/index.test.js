@@ -1,4 +1,4 @@
-import JSAcademy from './index';
+import JSAcademy from '../src';
 
 describe('JSAcademy', () => {
   it('is a JSAcademy', () => {

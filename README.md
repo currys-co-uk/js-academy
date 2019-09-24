@@ -1,4 +1,9 @@
 # This is a base repository for JS Academy
+## How to run GOL
+
+* run ```npm run start-gol``` to run GOL
+* run ```npm run start-gol-b``` to run GOL with '0' (zeroes) having black color
+
 ## Prerequisites
 * ideally unix environment
   

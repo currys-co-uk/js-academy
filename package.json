@@ -6,10 +6,13 @@
   "scripts": {
     "build": "babel ./src --out-dir ./build --ignore 'src/**/*.spec.js','src/**/*.test.js'",
     "start": "node ./build/index.js",
+    "start-gol": "node ./build/game-loop.js",
+    "start-gol-b": "node ./build/game-loop.js -b",
     "start:dev": "nodemon --exec babel-node ./src/index.js",
-    "test": "jest ./src",
+    "test": "jest ./test",
     "test:dev": "jest --watch ./src",
-    "lint:dev": "eslint ./src"
+    "lint:dev": "eslint ./src",
+    "lint-fix:dev": "eslint --fix ./src"
   },
   "repository": {
     "type": "git",
