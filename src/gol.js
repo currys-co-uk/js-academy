@@ -1,34 +1,36 @@
-export default function next(input) {
+export const countLiveNeighbours = (input, i, j) => {
+  let count = 0;
+
+  for (let x = -1; x < 2; x += 1) {
+    for (let y = -1; y < 2; y += 1) {
+      if (input[i + x] !== undefined && input[i + x][j + y] !== undefined && (x !== 0 || y !== 0)) {
+        count += input[i + x][j + y];
+      }
+    }
+  }
+
+  return count;
+};
+
+const next = (input) => {
   const output = input.map((row) => row.map((cell) => cell));
-  /*
-    input.map(function(row) {
-      return row.map(function(cell) {
-        return cell
-      })
-    })
-  */
 
   for (let i = 0; i < input.length; i += 1) {
     for (let j = 0; j < input[i].length; j += 1) {
       const liveNeighbours = countLiveNeighbours(input, i, j);
-      if (liveNeighbours < 2) {
-        output[i][j] = 0;
+      // Check if live cell should die
+      if (output[i][j] === 1) {
+        if (liveNeighbours < 2 || liveNeighbours > 3) {
+          output[i][j] = 0;
+        }
+      // Check if dead cell should become alive
+      } else if (liveNeighbours === 3) {
+        output[i][j] = 1;
       }
     }
   }
 
   return output;
-}
+};
 
-export function countLiveNeighbours(board, i, j) {
-  let count = 0;
-  for (let x = i - 1; x <= i + 1; x += 1) {
-    if (x < 0 || x >= board.length) { continue; } // eslint-disable-line no-continue
-    for (let y = j - 1; y <= j + 1; y += 1) {
-      if (y < 0 || y >= board[x].length) { continue; } // eslint-disable-line no-continue
-      if (x === i && y === j) { continue; } // eslint-disable-line no-continue
-      count += board[x][y];
-    }
-  }
-  return count;
-}
+export default next;
