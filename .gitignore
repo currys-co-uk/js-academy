@@ -1,4 +1,11 @@
+#node modules
 node_modules
+
+#build
 build
 
+#IDE
 .vscode
+
+#local history
+.history
