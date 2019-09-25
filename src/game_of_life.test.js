@@ -64,6 +64,35 @@ describe('Game of life', () => {
     const output = next(input);
     expect(output[0][2]).toEqual(1);
   });
+
+  test('given example from the webpage', () => {
+    const input = [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    const expectedOutput = [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    const output = next(input);
+    expect(output).toEqual(expectedOutput);
+  });
+
+  test('still alive', () => {
+    const input = [
+      [0, 0, 1, 1, 0, 0],
+      [0, 1, 0, 0, 1, 0],
+      [0, 1, 0, 0, 1, 0],
+      [0, 0, 1, 1, 0, 0],
+    ];
+
+    const output = next(input);
+    expect(output).toEqual(input);
+  });
 });
 
 describe('countLiveNeighbours', () => {
