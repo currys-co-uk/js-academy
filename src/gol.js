@@ -16,8 +16,12 @@ export default function next(input) {
   for (let i = 0; i < input.length; i += 1) {
     for (let j = 0; j < input[i].length; j += 1) {
       const liveNeighbours = countLiveNeighbours(input, i, j);
-      if (liveNeighbours < 2) {
+      if (liveNeighbours < 2 || liveNeighbours > 3) {
         output[i][j] = 0;
+      } else if (liveNeighbours === 3) {
+        output[i][j] = 1;
+      } else {
+        output[i][j] = input[i][j];
       }
     }
   }
