@@ -1,25 +1,3 @@
-export default function next(input) {
-  const output = input.map((row) => row.map((cell) => cell));
-  /*
-    input.map(function(row) {
-      return row.map(function(cell) {
-        return cell
-      })
-    })
-  */
-
-  for (let i = 0; i < input.length; i += 1) {
-    for (let j = 0; j < input[i].length; j += 1) {
-      const liveNeighbours = countLiveNeighbours(input, i, j);
-      if (liveNeighbours < 2) {
-        output[i][j] = 0;
-      }
-    }
-  }
-
-  return output;
-}
-
 export function countLiveNeighbours(board, i, j) {
   let count = 0;
   for (let x = i - 1; x <= i + 1; x += 1) {
@@ -31,4 +9,49 @@ export function countLiveNeighbours(board, i, j) {
     }
   }
   return count;
+}
+
+export function evaluateAnyLiveCellHasFewerThanTwoLiveNeighbours(isCellAlive, liveNeighbours)
+{
+  return isCellAlive && liveNeighbours < 2;
+}
+
+export function evaluateAnyLiveCellHasThreeLiveNeighbours(isCellAlive, liveNeighbours)
+{
+
+  return isCellAlive && liveNeighbours > 3;
+}
+
+export function evaluateAnyLiveCellWithTwoOrThreeLiveNeighbours(isCellAlive, liveNeighbours)
+{
+  return isCellAlive && (liveNeighbours === 2 || liveNeighbours === 3);
+}
+
+export function evaluateDeadCellWithExactlyThreeLIveNeighbours(isCellDead, liveNeighbours)
+{
+  return isCellDead && liveNeighbours === 3;
+}
+
+export default function next(input) {
+  const output = input.map((row) => row.map((cell) => cell));
+
+  for (let i = 0; i < input.length; i += 1) {
+    for (let j = 0; j < input[i].length; j += 1) {
+      const isCellAlive = input[i][j];
+      const liveNeighbours = countLiveNeighbours(input, i, j);
+      if (evaluateAnyLiveCellHasFewerThanTwoLiveNeighbours(isCellAlive, liveNeighbours)) {
+        output[i][j] = 0;
+      } else if (evaluateAnyLiveCellHasThreeLiveNeighbours(isCellAlive, liveNeighbours)) {
+        output[i][j] = 0;
+      } else if (evaluateAnyLiveCellWithTwoOrThreeLiveNeighbours(isCellAlive, liveNeighbours)) {
+        output[i][j] = 1;
+      } else if (evaluateDeadCellWithExactlyThreeLIveNeighbours(!isCellAlive, liveNeighbours)) {
+        output[i][j] = 1;
+      } else {
+        output[i][j] = 0;
+      }
+    }
+  }
+
+  return output;
 }
