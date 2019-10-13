@@ -1,18 +1,15 @@
 export default function next(input) {
   const output = input.map((row) => row.map((cell) => cell));
-  /*
-    input.map(function(row) {
-      return row.map(function(cell) {
-        return cell
-      })
-    })
-  */
 
   for (let i = 0; i < input.length; i += 1) {
     for (let j = 0; j < input[i].length; j += 1) {
-      const liveNeighbours = countLiveNeighbours(input, i, j);
-      if (liveNeighbours < 2) {
+      const liveNeighbours = countLiveNeighbours(input, i, j); // eslint-disable-line
+      if (liveNeighbours < 2 || liveNeighbours > 3) {
         output[i][j] = 0;
+      }
+
+      if (liveNeighbours === 3) {
+        output[i][j] = 1;
       }
     }
   }
