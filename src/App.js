@@ -1,5 +1,5 @@
 import React from "react";
-import GameOfLife from "./GameOfLife.js";
+import GameOfLife from "./GameOfLife";
 import './App.css';
 
 function App() {
