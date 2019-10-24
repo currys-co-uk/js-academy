@@ -29,12 +29,14 @@ it('renders input form when input dimensions are specified and submitted', () =>
   fireEvent.change(getByLabelText('input-dimension-cells'), {target: { value: 2}});
   fireEvent.click(getByText('Vygeneruj herní plán'));
 
-  expect(getAllByLabelText('input-cell')[0]).toBeVisible();
-  expect(getAllByLabelText('input-cell')[1]).toBeVisible();
-  expect(getAllByLabelText('input-cell')[2]).toBeVisible();
-  expect(getAllByLabelText('input-cell')[3]).toBeVisible();
-  expect(getAllByLabelText('input-cell')[4]).toBeVisible();
-  expect(getAllByLabelText('input-cell')[5]).toBeVisible();
+  const cells = getAllByLabelText('input-cell');
+
+  expect(cells[0]).toBeVisible();
+  expect(cells[1]).toBeVisible();
+  expect(cells[2]).toBeVisible();
+  expect(cells[3]).toBeVisible();
+  expect(cells[4]).toBeVisible();
+  expect(cells[5]).toBeVisible();
   expect(getByText('Začni Hru!')).toBeInTheDocument();
   expect(getByText('Začni novou hru!')).toBeInTheDocument();
 });
