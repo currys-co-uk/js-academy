@@ -1,4 +1,7 @@
-import next, { countLiveNeighbours } from './gol';
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
+import GameOfLife, {next, countLiveNeighbours, generateRandomBoard, areIterationsIdentical } from './gameOfLife';
 
 describe('Test countLiveNeighbours', () => {
   test('return 8 when all cells are live', () => {
@@ -251,3 +254,112 @@ describe('Test rule 4', () => {
     }
   });
 });
+
+describe('Test generateRandomBoard', () => {
+  test('Generate 3x4 grid', () => {
+    const width = 3;
+    const height = 4;
+
+    const grid = generateRandomBoard(width, height);
+    expect(grid.length).toEqual(height);
+    grid.forEach(row => {
+      expect(row.length).toEqual(width);
+    });
+  });
+});
+
+describe('Test areIterationsIdentical', () => {
+  test('Returns true for identical arrays', () => {
+    const array1 = [
+      [1, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1],
+    ];
+    const array2 = [
+      [1, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1],
+    ];
+    const result = areIterationsIdentical(array1, array2);
+    expect(result).toEqual(true);
+  });
+  test('Returns false for non identical arrays', () => {
+    const array1 = [
+      [1, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1],
+    ];
+    const array2 = [
+      [1, 1, 1],
+      [0, 1, 1],
+      [0, 0, 1],
+    ];
+    const result = areIterationsIdentical(array1, array2);
+    expect(result).toEqual(false);
+  });
+});
+
+const boardDataToString = boardData => boardData.map(row => row.join('')).join('');
+
+describe('Test boardDataToString', () => {
+  test('Returns correct string for given board', () => {
+    const boardData = [
+      [1, 1, 0],
+      [1, 1, 1],
+      [1, 1, 0],
+    ];
+    expect(boardDataToString(boardData)).toEqual('110111110');
+  })
+})
+
+describe('GameOfLife component tests', () => {
+  test('initial state', () => {
+    const boardData = [
+      [1, 1, 0],
+      [1, 1, 1],
+      [1, 1, 0],
+    ];
+    
+    const { getByTestId } = render(<GameOfLife boardData={boardData}/>);
+    const iterationCounter = getByTestId('iteration_counter');
+    expect(iterationCounter.innerHTML).toEqual('0');
+    const backButton = getByTestId('back_button');
+    expect(backButton).toHaveAttribute('disabled');
+    const board = getByTestId('board_table');
+    expect(board.textContent).toEqual(boardDataToString(boardData));
+  });
+
+  test('next and back buttons', () => {
+    const boardData = [
+      [1, 1, 0],
+      [1, 1, 1],
+      [1, 1, 0],
+    ];
+    const { getByTestId } = render(<GameOfLife boardData={boardData}/>);
+    const updatedBoardData = next(boardData);
+    const nextButton = getByTestId('next_button');
+    fireEvent.click(nextButton);
+    const iterationCounter = getByTestId('iteration_counter');
+    expect(iterationCounter.innerHTML).toEqual('1');
+    const backButton = getByTestId('back_button');
+    expect(backButton).not.toHaveAttribute('disabled');
+    const board = getByTestId('board_table');
+    expect(board.textContent).toEqual(boardDataToString(updatedBoardData));
+    fireEvent.click(backButton);
+    expect(iterationCounter.innerHTML).toEqual('0');
+    expect(board.textContent).toEqual(boardDataToString(boardData));
+  });
+
+  test('reset button', () => {
+    const { getByTestId } = render(<GameOfLife />);
+    const nextButton = getByTestId('next_button');
+    fireEvent.click(nextButton);
+    fireEvent.click(nextButton);
+    const iterationCounter = getByTestId('iteration_counter');
+    expect(iterationCounter.innerHTML).toEqual('2');
+    const resetButton = getByTestId('reset_button');
+    fireEvent.click(resetButton);
+    expect(iterationCounter.innerHTML).toEqual('0');
+  });
+});
+
