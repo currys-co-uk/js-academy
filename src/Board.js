@@ -1,5 +1,5 @@
 import React from "react";
-import Row from "./Row.js";
+import Row from "./Row";
 import PropTypes from "prop-types";
 
 const tableStyles = { // inline style attributes for Board
