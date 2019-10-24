@@ -1,7 +1,5 @@
-function JSAcademy() {
-  return 'JSAcademy';
-}
+import React from 'react';
+import ReactDOM from 'react-dom';
+import GameOfLife from './components/GameOfLife/gameOfLife';
 
-console.log(JSAcademy()); // eslint-disable-line no-console
-
-export default JSAcademy;
+ReactDOM.render(<GameOfLife />, document.getElementById('root'));

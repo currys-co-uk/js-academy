@@ -1,35 +1,40 @@
 {
   "name": "js-academy",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "react-scripts": "3.2.0",
+    "styled-components": "^4.4.0"
+  },
   "scripts": {
-    "build": "babel ./src --out-dir ./build --ignore 'src/**/*.spec.js','src/**/*.test.js'",
-    "start": "node ./build/index.js",
-    "start:dev": "nodemon --exec babel-node ./src/index.js",
-    "test": "jest ./src",
-    "test:dev": "jest --watch ./src",
-    "lint:dev": "eslint ./src"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dixons/js-academy.git"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "author": "dominik.tilp@dixonscarphone.com",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dixons/js-academy/issues"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
-  "homepage": "https://github.com/dixons/js-academy#readme",
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "babel-jest": "^24.9.0",
-    "eslint": "^6.1.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
-    "jest": "^24.9.0",
-    "nodemon": "^1.19.1"
+    "@testing-library/jest-dom": "^4.1.2",
+    "@testing-library/react": "^9.3.0",
+    "@types/react": "^16.9.9",
+    "@types/styled-components": "^4.1.19",
+    "react-test-renderer": "^16.11.0",
+    "typescript": "^3.6.4"
   }
 }
