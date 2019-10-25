@@ -67,10 +67,15 @@ class GameOfLife extends React.PureComponent {
     return (<div>
       {this.state.isInputDimensionVisible && <InputDimensions onSubmitted={this.onInputDimensionCompleted}/>}
       {this.state.isInputFormVisible && <InputForm name="input-form" rows={this.state.boardDimensions.rows} cells={this.state.boardDimensions.cells} onSubmitted={this.onInputFormCompleted}/>}
-      {this.state.isGameOfLifeVisible && <GameOfLifeBoard boardState={this.state.boardState}/>}
+      {this.state.isGameOfLifeVisible && <GameOfLifeBoard boardState={this.state.boardState} next={this.props.next}/>}
       {!this.state.isInputDimensionVisible && <Button onClick={this.onResetClicked} title="Začni novou hru!"/>}
     </div>)
   }
 }
+
+GameOfLife.defaultProps = {
+  next : () => {}
+};
+
 
 export default GameOfLife;
