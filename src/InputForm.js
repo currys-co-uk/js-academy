@@ -2,7 +2,7 @@ import React from "react";
 import InputRow from './InputRow';
 import Button from "./Button";
 
-export default class InputForm extends React.PureComponent {
+class InputForm extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,8 +11,6 @@ export default class InputForm extends React.PureComponent {
       cells: props.cells,
       values : this.createEmptyValuesState(props.rows, props.cells)
     };
-
-    this.onFormSubmitted = props.onSubmitted;
   }
 
   createEmptyValuesState(rows, cells) {
@@ -67,6 +65,12 @@ export default class InputForm extends React.PureComponent {
   handleFormSubmit = event => {
     event.preventDefault();
 
-    this.onFormSubmitted(this.state.values);
+    this.props.onSubmitted(this.state.values);
   }
 }
+
+InputForm.defaultProps = {
+  onSubmitted : () => {}
+};
+
+export default InputForm;

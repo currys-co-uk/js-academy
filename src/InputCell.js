@@ -1,6 +1,6 @@
 import React from "react";
 
-export default class InputCell extends React.PureComponent {
+class InputCell extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -9,7 +9,6 @@ export default class InputCell extends React.PureComponent {
       cell : parseInt(props.cell),
       value : 0
     };
-    this.onInputChangeCallback = props.onChange;
   }
 
   render() {
@@ -30,12 +29,16 @@ export default class InputCell extends React.PureComponent {
       }
     });
 
-    if (this.onInputChangeCallback) {
-      this.onInputChangeCallback({
-        row : this.state.row,
-        cell : this.state.cell,
-        value: value
-      });
-    }
+    this.props.onChange({
+      row : this.state.row,
+      cell : this.state.cell,
+      value: value
+    });
   }
 }
+
+InputCell.defaultProps = {
+  onChange : () => {}
+};
+
+export default InputCell;

@@ -10,11 +10,9 @@ class GameOfLifeBoard extends React.PureComponent {
       boardState : props.boardState,
       initialBoardState : props.boardState
     };
-    this.handleNextClick = this.handleNextClick.bind(this); // the "handleNextClick" must be bound, or arro function would need to be used
-    this.handleResetClick = this.handleResetClick.bind(this);
   }
 
-  handleNextClick(){
+  handleNextClick = event => {
     this.setState(currentState => { // State Mutation. First argument is always the whole current state
       return { // Function must return the whole New State
         ...currentState, // "..." (spread) is deconstruction of the object adding the change
@@ -23,7 +21,7 @@ class GameOfLifeBoard extends React.PureComponent {
     });
   }
 
-  handleResetClick(){
+  handleResetClick = event => {
     this.setState(currentState => {
       return {
         ...currentState,

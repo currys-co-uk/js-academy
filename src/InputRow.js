@@ -1,7 +1,7 @@
 import React from "react";
 import InputCell from './InputCell';
 
-export default class InputRow extends React.PureComponent {
+class InputRow extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -10,8 +10,6 @@ export default class InputRow extends React.PureComponent {
       row: props.row,
       cells : props.cells,
     };
-
-    this.onInputCellChangeCallback = this.props.onChange;
   }
 
   render() {
@@ -21,7 +19,7 @@ export default class InputRow extends React.PureComponent {
     for (let cell=0; cell < this.state.cells; cell++) {
       cells.push(
         <td key={"row-" + this.state.row + "-" + cell} aria-label="table-cell">
-          <InputCell key={this.state.row + "-" + cell} row={this.state.row} cell={cell} onChange={this.onInputCellChangeCallback}/>
+          <InputCell key={this.state.row + "-" + cell} row={this.state.row} cell={cell} onChange={this.props.onChange}/>
         </td>
       )
     }
@@ -33,3 +31,9 @@ export default class InputRow extends React.PureComponent {
     )
   }
 }
+
+InputRow.defaultProps = {
+  onChange : () => {}
+};
+
+export default InputRow;
