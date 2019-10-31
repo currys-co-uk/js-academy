@@ -1,19 +1,4 @@
-.mycell_dead {
-    width: 10px;
-    height: 10px;
+  body {
     font-family: sans-serif;
-    text-align: center;
-    border: 0px solid white;
-    background: dimgrey;
-}
-
-  .mycell_live {
-    width: 10px;
-    height: 10px;
-    font-family: sans-serif;
-    text-align: center;
-    border: 0px solid white;
-    background: yellow;
-    color: black;
   }
   
