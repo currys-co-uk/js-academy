@@ -28,14 +28,18 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
-const BoardDesk = styled.table`
+const BoardDesk = styled.div`
   background: #1A1A1D;
-  border-spacing: 0px;
+  display: inline-block;
 `;
 
-const CellAlive = styled.td`
+const RowClass = styled.div`
+  min-height: 10px;
+`;
+
+const CellAlive = styled.div`
+  display: inline-block;
   width: 10px;
-  height: 10px;
   background: #c3073F;
   color: black;
   border: 1px solid black;
@@ -46,9 +50,9 @@ const CellAlive = styled.td`
   }
 `;
 
-const CellDead = styled.td`
+const CellDead = styled.div`
+  display: inline-block;
   width: 10px;
-  height: 10px;
   background: #1A1A1D;
   border: 1px solid black;
 
@@ -70,14 +74,14 @@ class Row extends React.PureComponent {
 
   render() {
     return (
-      <tr>
+      <RowClass>
         {this.props.row.map(cell => {
           if (cell.state === 1) {
-           return <CellAlive onClick={evt => this.drawCell(evt)} data-x={cell.x} data-y={cell.y}></CellAlive>;
+           return <CellAlive onClick={evt => this.drawCell(evt)} data-x={cell.x} data-y={cell.y}>&nbsp;</CellAlive>;
           }
-          return <CellDead onClick={evt => this.drawCell(evt)} data-x={cell.x} data-y={cell.y}></CellDead>;
+          return <CellDead onClick={evt => this.drawCell(evt)} data-x={cell.x} data-y={cell.y}>&nbsp;</CellDead>;
         })}
-      </tr>
+      </RowClass>
     );
   }
 }
@@ -85,11 +89,9 @@ class Row extends React.PureComponent {
 function Board(props) {
   return (
     <BoardDesk>
-      <tbody>
         {props.boardState.map(row => (
           <Row row={row} />
         ))}
-      </tbody>
     </BoardDesk>
   );
 }
