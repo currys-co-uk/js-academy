@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import {Bounce,Flip} from 'react-reveal'
 import PropTypes from "prop-types";
 import next from "./gol.js";
 import styled from 'styled-components'
@@ -62,6 +63,24 @@ const CellDead = styled.div`
   }
 `;
 
+function generateBoard(rows, cols, random) {
+  var board = [];
+  for (var i = 0; i < rows; i++) {
+    board[i] = [];
+    for (var j = 0; j < cols; j++) {
+      board[i][j] = [];
+      if (random) {
+        board[i][j]["state"] = Math.round(Math.random()*0.7);
+      } else {
+        board[i][j]["state"] = 0;
+      }
+      board[i][j]["x"] = i;
+      board[i][j]["y"] = j;
+    }
+  }
+  return board;
+}
+
 class Row extends React.PureComponent {
   drawCell(evt) {
     if (this.props.row[evt.target.dataset.y]["state"] === 1) {
@@ -105,11 +124,14 @@ Board.propTypes = {
 class GolApp extends React.PureComponent {
   constructor(props) {
     super(props);
+    var defaultRows = 40;
+    var defaultCols = 50;
+    var defaultBoard = generateBoard(defaultRows, defaultCols, true);
     this.state = {
-      boardState: [],
-      cols: 50,
-      rows: 40,
+      rows: defaultRows,
+      cols: defaultCols,
       animation: false,
+      boardState: defaultBoard
     }
     this.handleNextClick = this.handleNextClick.bind(this);
   }
@@ -135,26 +157,17 @@ class GolApp extends React.PureComponent {
     console.log(this.state);
    }
 
-   animation = () => {
-     for(let i = 0; i<10; i++)
-     {
+  animation = () => {
+    for(let i = 0; i<10; i++)
+    {
       this.handleNextClick();
       this.forceUpdate();
-     }
-   }
+    }
+  }
 
   reset = () => {
     this.setState(currentState => {
-      var board = [];
-      for (var i = 0; i < currentState.rows; i++) {
-        board[i] = [];
-        for (var j = 0; j < currentState.cols; j++) {
-          board[i][j] = [];
-          board[i][j]["state"] = Math.round(Math.random()*0.7);
-          board[i][j]["x"] = i;
-          board[i][j]["y"] = j;
-        }
-      }
+      var board = generateBoard(currentState.rows, currentState.cols, true);
       return {
         boardState: board
       };
@@ -163,16 +176,7 @@ class GolApp extends React.PureComponent {
 
   clear = () => {
     this.setState(currentState => {
-      var board = [];
-      for (var i = 0; i < currentState.rows; i++) {
-        board[i] = [];
-        for (var j = 0; j < currentState.cols; j++) {
-          board[i][j] = [];
-          board[i][j]["state"] = 0;
-          board[i][j]["x"] = i;
-          board[i][j]["y"] = j;
-        }
-      }
+      var board = generateBoard(currentState.rows, currentState.cols, false);
       return {
         boardState: board
       };
@@ -181,23 +185,38 @@ class GolApp extends React.PureComponent {
 
   render() {
     return (
+      <center>
       <div>
-        <div>
-          {this.state.boardState && <Board boardState={this.state.boardState} />}
-        </div>
-        <div>
-          Board: 
-          <Input type="edit" name="cols" title="Width" value={this.state.cols} size="1" onChange={evt =>this.updateInput(evt)}/> x
-          <Input type="edit" name="rows" title="Height" value={this.state.rows} size="1" onChange={evt =>this.updateInput(evt)}/>
-          </div>
           <div>
-            <Button onClick={this.reset} primary>Random game</Button>
-            <Button onClick={this.clear} primary>Clear board</Button>
-            <Button onClick={this.handleNextClick}>Next state</Button>
-            <Button onClick={this.animation}>Start/Stop animation</Button>
-            <Button onClick={this.logs} title="LOG" primary>Logs</Button>
+          <Bounce top>
+            <h1>G.A.M.E of L.I.F.E</h1>
+          </Bounce>
         </div>
+        <div>
+          <Flip bottom>
+            <Board boardState={this.state.boardState} />
+          </Flip>
+        </div>
+        <div>
+          <Bounce bottom>
+          <div>
+            Board: 
+            <Input type="edit" name="cols" title="Width" value={this.state.cols} size="1" onChange={evt =>this.updateInput(evt)}/> x
+            <Input type="edit" name="rows" title="Height" value={this.state.rows} size="1" onChange={evt =>this.updateInput(evt)}/>
+          </div>
+          </Bounce>
+          <Bounce bottom>
+            <div>
+              <Button onClick={this.reset} primary>Random game</Button>
+              <Button onClick={this.clear} primary>Clear board</Button>
+              <Button onClick={this.handleNextClick}>Next state</Button>
+              <Button onClick={this.animation}>Start/Stop animation</Button>
+              <Button onClick={this.logs} title="LOG" primary>Logs</Button>
+            </div>
+          </Bounce>
       </div>
+      </div>
+      </center>
     );
   }
 }
