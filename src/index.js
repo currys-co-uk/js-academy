@@ -16,6 +16,10 @@ const Button = styled.button`
   padding: 5px 10px;
   border: 2px solid #c3073F;
   border-radius: 5px;
+
+  &:hover {
+    border: 2px solid black;
+  }
 `;
 
 const Input = styled.input`
@@ -27,6 +31,10 @@ const Input = styled.input`
   padding: 5px 5px;
   border: 2px solid #c3073F;
   border-radius: 5px;
+
+  &:hover {
+    border: 2px solid black;
+  }
 `;
 
 const BoardDesk = styled.div`
@@ -63,6 +71,26 @@ const CellDead = styled.div`
   }
 `;
 
+const CounterLeft = styled.div`
+  float: left;
+  color: #c3073F;
+  font-size: 12pt;
+  font-weight: bold;
+  border: 1px solid black;
+  padding: 5px;
+  margin: 0px 50px 10px 0px;
+`;
+
+const CounterRight = styled.div`
+  float: right;
+  color: black;
+  font-size: 12pt;
+  font-weight: bold;
+  border: 1px solid black;
+  padding: 5px;
+  margin: 0px 0px 10px 50px;
+`;
+
 function generateBoard(rows, cols, random) {
   var board = [];
   for (var i = 0; i < rows; i++) {
@@ -81,6 +109,32 @@ function generateBoard(rows, cols, random) {
   return board;
 }
 
+function countBoardCells(board)
+{
+  var liveCells = 0;
+  var deadCells = 0;
+  for (var i = 0; i < board.length; i++) {
+    var counts = countRowCells(board[i]);
+    liveCells += counts.liveCells;
+    deadCells += counts.deadCells;
+  }
+  return {liveCells: liveCells, deadCells: deadCells};
+}
+
+function countRowCells(row)
+{
+  var liveCells = 0;
+  var deadCells = 0;
+  for (var i = 0; i < row.length; i++) {
+    if (row[i]["state"] === 1) {
+        liveCells++;
+        continue;
+    }
+    deadCells++;
+  }
+  return {liveCells: liveCells, deadCells: deadCells};
+}
+
 class Row extends React.PureComponent {
   drawCell(evt) {
     if (this.props.row[evt.target.dataset.y]["state"] === 1) {
@@ -88,6 +142,8 @@ class Row extends React.PureComponent {
     } else {
       this.props.row[evt.target.dataset.y]["state"] = 1;
     }
+
+    this.props.counterHandler(countBoardCells(this.props.board.boardState));
     this.forceUpdate();
   }
 
@@ -96,29 +152,33 @@ class Row extends React.PureComponent {
       <RowClass>
         {this.props.row.map(cell => {
           if (cell.state === 1) {
-           return <CellAlive onClick={evt => this.drawCell(evt)} data-x={cell.x} data-y={cell.y}>&nbsp;</CellAlive>;
+           return <CellAlive onClick={evt => this.drawCell(evt)} data-x={cell.x} data-y={cell.y} key={cell.y} >&nbsp;</CellAlive>;
           }
-          return <CellDead onClick={evt => this.drawCell(evt)} data-x={cell.x} data-y={cell.y}>&nbsp;</CellDead>;
+          return <CellDead onClick={evt => this.drawCell(evt)} data-x={cell.x} data-y={cell.y} key={cell.y} >&nbsp;</CellDead>;
         })}
       </RowClass>
     );
   }
 }
 
-function Board(props) {
-  return (
-    <BoardDesk>
-        {props.boardState.map(row => (
-          <Row row={row} />
-        ))}
-    </BoardDesk>
-  );
+class Board extends React.PureComponent {
+  render () {
+    const rows = [];
+    var i = 0;
+    for (const row of this.props.board.boardState) {
+      rows.push(<Row board={this.props.board} row={row} key={i} counterHandler={this.props.counterHandler} />)
+      i++;
+    }
+    return (
+      <BoardDesk>
+            {rows}
+      </BoardDesk>
+    );
+  };
 }
 
 Board.propTypes = {
-  boardState: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.number.isRequired).isRequired
-  ).isRequired
+  board: PropTypes.object.isRequired
 };
 
 class GolApp extends React.PureComponent {
@@ -127,20 +187,31 @@ class GolApp extends React.PureComponent {
     var defaultRows = 40;
     var defaultCols = 50;
     var defaultBoard = generateBoard(defaultRows, defaultCols, true);
+    var count = countBoardCells(defaultBoard);
     this.state = {
       rows: defaultRows,
       cols: defaultCols,
       animation: false,
-      boardState: defaultBoard
+      boardState: defaultBoard,
+      cellCounts: count
     }
     this.handleNextClick = this.handleNextClick.bind(this);
+    this.counterHandler = this.counterHandler.bind(this);
+  }
+
+  counterHandler(counts) {
+    this.setState({
+      cellCounts: counts
+    })
   }
 
   handleNextClick() {
+    var newBoard = next(this.state.boardState);
     this.setState(currentState => {
       return {
         ...currentState,
-        boardState: next(currentState.boardState)
+        boardState: newBoard,
+        cellCounts: countBoardCells(newBoard)
       };
     });
   }
@@ -168,8 +239,10 @@ class GolApp extends React.PureComponent {
   reset = () => {
     this.setState(currentState => {
       var board = generateBoard(currentState.rows, currentState.cols, true);
+      var cellsCount = countBoardCells(board); 
       return {
-        boardState: board
+        boardState: board,
+        cellCounts: cellsCount
       };
     });
   };
@@ -177,8 +250,10 @@ class GolApp extends React.PureComponent {
   clear = () => {
     this.setState(currentState => {
       var board = generateBoard(currentState.rows, currentState.cols, false);
+      var cellsCount = countBoardCells(board);
       return {
-        boardState: board
+        boardState: board,
+        cellCounts: cellsCount
       };
     });
   };
@@ -194,7 +269,15 @@ class GolApp extends React.PureComponent {
         </div>
         <div>
           <Flip bottom>
-            <Board boardState={this.state.boardState} />
+            <div>
+              <div style={{'display': 'inline-block'}}>
+                <CounterLeft>{this.state.cellCounts.liveCells}</CounterLeft>
+                <CounterRight>{this.state.cellCounts.deadCells}</CounterRight>
+              </div>
+              <div>
+                <Board board={this.state} counterHandler={this.counterHandler} />
+              </div>
+            </div>
           </Flip>
         </div>
         <div>
@@ -211,7 +294,7 @@ class GolApp extends React.PureComponent {
               <Button onClick={this.clear} primary>Clear board</Button>
               <Button onClick={this.handleNextClick}>Next state</Button>
               <Button onClick={this.animation}>Start/Stop animation</Button>
-              <Button onClick={this.logs} title="LOG" primary>Logs</Button>
+              <Button onClick={this.logs} primary>Logs</Button>
             </div>
           </Bounce>
       </div>
