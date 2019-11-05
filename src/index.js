@@ -229,12 +229,12 @@ class GolApp extends React.PureComponent {
 
   animation = (evt) => {
     if (this.state.animation > 0) {
-      evt.target.textContent = "Start animation";
       clearInterval(this.state.animation);
-      this.state.animation = 0;
+      this.setState({animation: 0});
+      evt.target.textContent = "Start animation";
     } else {
+      this.setState({animation: setInterval(() => this.handleNextClick(), 200)});
       evt.target.textContent = "Stop animation";
-      this.state.animation = setInterval(() => this.handleNextClick(), 200);
     }
   }
 
