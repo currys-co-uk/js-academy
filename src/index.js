@@ -191,7 +191,6 @@ class GolApp extends React.PureComponent {
     this.state = {
       rows: defaultRows,
       cols: defaultCols,
-      animation: false,
       boardState: defaultBoard,
       cellCounts: count
     }
@@ -228,11 +227,14 @@ class GolApp extends React.PureComponent {
     console.log(this.state);
    }
 
-  animation = () => {
-    for(let i = 0; i<10; i++)
-    {
-      this.handleNextClick();
-      this.forceUpdate();
+  animation = (evt) => {
+    if (this.state.animation > 0) {
+      evt.target.textContent = "Start animation";
+      clearInterval(this.state.animation);
+      this.state.animation = 0;
+    } else {
+      evt.target.textContent = "Stop animation";
+      this.state.animation = setInterval(() => this.handleNextClick(), 200);
     }
   }
 
@@ -264,7 +266,7 @@ class GolApp extends React.PureComponent {
       <div>
           <div>
           <Bounce top>
-            <h1>G.A.M.E of L.I.F.E</h1>
+            <h1>░G░Λ░M░Σ░░░Ө░F░░░L░I░F░Σ░</h1>
           </Bounce>
         </div>
         <div>
@@ -293,7 +295,7 @@ class GolApp extends React.PureComponent {
               <Button onClick={this.reset} primary>Random game</Button>
               <Button onClick={this.clear} primary>Clear board</Button>
               <Button onClick={this.handleNextClick}>Next state</Button>
-              <Button onClick={this.animation}>Start/Stop animation</Button>
+              <Button onClick={evt => this.animation(evt)}>Start animation</Button>
               <Button onClick={this.logs} primary>Logs</Button>
             </div>
           </Bounce>
