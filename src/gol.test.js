@@ -18,6 +18,48 @@ test('one live cell will die', () => {
   expect(output).toEqual(expectedOutput);
 });
 
+test('cell with one neighbour will die', () => {
+  const input = [[1, 1]];
+  const expectedOutput = [[0, 0]];
+  const output = next(input);
+  expect(output).toEqual(expectedOutput);
+});
+
+test('cell with less than two neighbours will die', () => {
+  const input = [[1, 1, 1]];
+  const expectedOutput = [[0, 1, 0]];
+  const output = next(input);
+  expect(output).toEqual(expectedOutput);
+});
+
+test('cells with 3 neighbours will survive', () => {
+  const input = [[1, 1], [1, 1]];
+  const expectedOutput = [[1, 1], [1, 1]];
+  const output = next(input);
+  expect(output).toEqual(expectedOutput);
+});
+
+test('cells with 3 neighbours will become alive', () => {
+  const input = [[1, 1], [1, 0]];
+  const expectedOutput = [[1, 1], [1, 1]];
+  const output = next(input);
+  expect(output).toEqual(expectedOutput);
+});
+
+test('cells with 4 neighbours will die', () => {
+  const input = [[1, 1, 1], [1, 1, 0]];
+  const expectedOutput = [[1, 0, 1], [1, 0, 1]];
+  const output = next(input);
+  expect(output).toEqual(expectedOutput);
+});
+
+test('cells with 5 neighbours will die', () => {
+  const input = [[1, 1, 1], [1, 1, 1]];
+  const expectedOutput = [[1, 0, 1], [1, 0, 1]];
+  const output = next(input);
+  expect(output).toEqual(expectedOutput);
+});
+
 test('it will work', () => {
   const input = [
     [0, 1, 1],
