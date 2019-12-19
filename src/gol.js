@@ -11,15 +11,8 @@ export function countLiveNeighbours(board, i, j) {
   return count;
 }
 
-export default function next(input) {
+export function next(input) {
   const output = input.map((row) => row.map((cell) => cell));
-  /*
-    input.map(function(row) {
-      return row.map(function(cell) {
-        return cell
-      })
-    })
-  */
 
   for (let i = 0; i < input.length; i += 1) {
     for (let j = 0; j < input[i].length; j += 1) {
